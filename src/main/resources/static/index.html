@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WebExtract — Web Data Extraction System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- ── Animated background grid ── -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <div class="app-wrapper">
+
+    <!-- ══ HEADER ══════════════════════════════════════════════════════════ -->
+    <header class="site-header">
+      <div class="logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">WebExtract</span>
+        <span class="logo-badge">v1.0</span>
+      </div>
+      <p class="tagline">Full-stack web data extraction · Spring Boot + Jsoup</p>
+    </header>
+
+    <!-- ══ SEARCH PANEL ════════════════════════════════════════════════════ -->
+    <section class="search-panel glass-card" aria-label="URL input">
+      <div class="search-bar-wrap">
+        <span class="search-prefix">GET</span>
+        <input
+          id="urlInput"
+          type="url"
+          class="url-input"
+          placeholder="https://example.com"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Target URL"
+        />
+        <button id="scrapeBtn" class="btn-scrape" aria-label="Start scrape">
+          <span class="btn-label">Extract</span>
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+      <p class="search-hint">Enter any public URL and hit <kbd>Enter</kbd> or click Extract.</p>
+    </section>
+
+    <!-- ══ STATUS / SPINNER ════════════════════════════════════════════════ -->
+    <div id="statusBar" class="status-bar hidden" role="status" aria-live="polite">
+      <div class="spinner" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
+      <span id="statusText">Connecting to target…</span>
+    </div>
+
+    <!-- ══ ERROR BANNER ════════════════════════════════════════════════════ -->
+    <div id="errorBanner" class="error-banner hidden" role="alert">
+      <span class="error-icon">✕</span>
+      <div class="error-body">
+        <strong id="errorCode"></strong>
+        <span id="errorMsg"></span>
+      </div>
+      <button class="error-dismiss" onclick="dismissError()" aria-label="Dismiss error">✕</button>
+    </div>
+
+    <!-- ══ RESULTS SECTION ═════════════════════════════════════════════════ -->
+    <section id="results" class="results hidden" aria-label="Scrape results">
+
+      <!-- Meta bar -->
+      <div class="results-meta">
+        <div class="meta-item">
+          <span class="meta-label">URL</span>
+          <a id="metaUrl" class="meta-value url-chip" href="#" target="_blank" rel="noopener noreferrer">—</a>
+        </div>
+        <div class="meta-actions">
+          <button id="exportBtn" class="btn-export" onclick="exportCSV()">
+            ↓ Export CSV
+          </button>
+          <button class="btn-clear" onclick="clearResults()">Clear</button>
+        </div>
+      </div>
+
+      <!-- Stat chips -->
+      <div class="stat-row">
+        <div class="stat-chip">
+          <span class="stat-num" id="statTitle">—</span>
+          <span class="stat-label">Title</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-num" id="statHeadings">0</span>
+          <span class="stat-label">Headings</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-num" id="statLinks">0</span>
+          <span class="stat-label">Links</span>
+        </div>
+      </div>
+
+      <!-- Data grid -->
+      <div class="data-grid">
+
+        <!-- Title card -->
+        <div class="data-card card-title glass-card">
+          <h2 class="card-header">
+            <span class="card-icon">T</span> Page Title
+          </h2>
+          <p id="titleContent" class="title-text"></p>
+        </div>
+
+        <!-- Headings card -->
+        <div class="data-card card-headings glass-card">
+          <h2 class="card-header">
+            <span class="card-icon">H</span> Headings
+            <span id="headingCount" class="count-badge">0</span>
+          </h2>
+          <ul id="headingsList" class="data-list"></ul>
+        </div>
+
+        <!-- Links card -->
+        <div class="data-card card-links glass-card">
+          <h2 class="card-header">
+            <span class="card-icon">L</span> Links
+            <span id="linkCount" class="count-badge">0</span>
+          </h2>
+          <div class="link-search-wrap">
+            <input
+              id="linkFilter"
+              type="text"
+              class="link-filter"
+              placeholder="Filter links…"
+              oninput="filterLinks()"
+              aria-label="Filter links"
+            />
+          </div>
+          <ul id="linksList" class="data-list links-list"></ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══ FOOTER ══════════════════════════════════════════════════════════ -->
+    <footer class="site-footer">
+      <span>Spring Boot 3 · Jsoup · Vanilla JS</span>
+      <span class="footer-sep">·</span>
+      <span>All requests proxied through <code>/api/scrape</code></span>
+    </footer>
+
+  </div><!-- /app-wrapper -->
+
+  <script src="app.js"></script>
+</body>
+</html>
