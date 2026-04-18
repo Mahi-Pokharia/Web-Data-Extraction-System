@@ -1,7 +1,5 @@
 package com.project.scraper.model;
 
-public package com.project.scraper.model;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.List;
@@ -49,7 +47,4 @@ public class WebData implements Serializable {
                         headings == null ? 0 : headings.size(),
                         links    == null ? 0 : links.size());
     }
-}
- {
-    
 }
